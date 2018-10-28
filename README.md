@@ -29,10 +29,28 @@ et relancer le daemon
 
 3. Installer gitlab-ce
 
-suivit du tuto tp
+suivit du tuto tp.
+pour le parametrage du firewall nous nous somme contenté de taper:
+```
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+firewall-cmd --zone=public --add-port=443/tcp --permanent
+systemctl reload firewalld
+```
 
 4. Docker registry
 
+j'ai récupérer le dossier git via
+```
+git clone git@192.168.56.101:julien/test.git
+```
+pour cela penser à ajouter une clé rsa via la command ssh-keygen et de la donner dans le repertoire git
+suite à la modifcation de /etc/gitlab/gitlab.rb j'ai du effectuer un changemant sur ma clée ssl pour pouvoir effectuer un "docker login" (dossier /etc/gitlab/ssl/)
+```
+echo subjectAltName = IP:127.0.0.1 > extfile.cnf
+openssl x509 -req -days 365 -in <FQDN>.crt -CA ca.pem -CAkey ca-key.pem -CAcreateserial \
+   -out server-cert.pem -extfile extfile.cnf
+gitlab-ctl reconigure
+```
 ## Part 2 : Docker swarm
 
 1. Création du swarm
@@ -85,7 +103,7 @@ deploy:
   labels:
     label1: 'value1'
   placement:
-    constraints: 
+    constraints:
       - node.role == worker
 ```
 
@@ -98,7 +116,6 @@ services:
     ports:
       - "8000:8000"
 ```
->>> Redis scale ???
 
 3. Faire joujou: obtenir de la visualisation et de métriques
 
