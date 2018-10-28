@@ -1,4 +1,6 @@
-# DockerProj
+# B3-Conteneurisation
+suivit du tp:
+https://github.com/It4lik/B3-CT-2018/blob/master/tp2/tp2.md
 
 ## Part 1 : Gitlab
 
